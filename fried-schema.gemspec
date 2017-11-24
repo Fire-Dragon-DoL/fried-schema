@@ -32,4 +32,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "fried-test"
 
   spec.add_runtime_dependency "fried-core"
+  spec.add_runtime_dependency "fried-typings"
 end

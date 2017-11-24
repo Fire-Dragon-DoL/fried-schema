@@ -1,8 +1,14 @@
 require "fried/core"
+require "fried/schema/attribute/definition"
+require "fried/schema/attribute/define_methods"
 require "fried/schema/definition"
+require "fried/schema/set_defaults"
 
 module Fried::Schema
-  module Loose
+  # Provides {.attribute} macro which allows to easily define type-safe
+  # accessors. The attributes are initialized with default values or with
+  # {nil} if none was provided
+  module Struct
     module Initializer
       def initialize
         schema = self.class.instance_variable_get(:@__fried_schema__)
@@ -24,8 +30,10 @@ module Fried::Schema
       # @return [Symbol] reader method name
       def attribute(name, type, default: Noop)
         @__fried_schema__ ||= ::Fried::Schema::Definition.new
-        attribute_definition = @__fried_schema__.add_attribute(name, type)
-        ::Fried::Schema::DefineAttribute.(attribute_definition, self)
+        definer = ::Fried::Schema::Attribute::Definition
+        attribute_definition = definer.new(name, type, default)
+        @__fried_schema__.add_attribute(attribute_definition)
+        ::Fried::Schema::Attribute::DefineMethods.(attribute_definition, self)
       end
     end
 
