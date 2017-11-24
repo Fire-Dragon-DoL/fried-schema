@@ -24,8 +24,6 @@ module Fried::Schema::Attribute
     # @param klass [Class, Module]
     # @return [Definition]
     def call(definition, klass)
-      return if is.nil?
-
       is_a = is[definition.type]
       define_writer(definition, is_a, klass)
     end
