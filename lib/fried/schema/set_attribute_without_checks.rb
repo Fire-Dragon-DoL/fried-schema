@@ -1,8 +1,8 @@
 require "fried/core"
 
 module Fried::Schema
-  # Set attribute value on object
-  class SetAttribute
+  # Set attribute value on object skipping type-checking
+  class SetAttributeWithoutChecks
     def self.build
       new
     end
@@ -17,8 +17,8 @@ module Fried::Schema
     # @param value [Object] anything
     # @return [Object] the passed value
     def call(obj, attribute, value)
-      writer = attribute.writer
-      obj.public_send(writer, value)
+      variable = attribute.instance_variable
+      obj.instance_variable_set(variable, value)
     end
   end
 end

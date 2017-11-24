@@ -16,8 +16,8 @@ module Fried::Schema
     # @param attribute [Attribute::Definition]
     # @return [Object] value from the object attribute
     def call(obj, attribute)
-      variable = attribute.instance_variable
-      obj.instance_variable_get(variable)
+      reader = attribute.reader
+      obj.public_send(reader)
     end
   end
 end
