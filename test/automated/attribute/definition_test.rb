@@ -1,7 +1,7 @@
 require "test_helper"
 require "fried/schema/attribute/definition"
 
-class DefinitionTest < Minitest::Spec
+class AttributeDefinitionTest < Minitest::Spec
   Attribute = ::Fried::Schema::Attribute
 
   it "has #reader returning name symbolized" do
