@@ -71,6 +71,36 @@ person.age # => 123
 person.to_h # => { name: "John", born_at: 2017-11-24 00:55:50 -0800, age: 123 }
 ```
 
+### Fried::Typings integration
+
+The gem integrates with [fried-typings][fried-typings-link], you can use
+those type as checks:
+
+```ruby
+class Person
+  include Fried::Typings
+  include Fried::Schema::DataEntity
+
+  attribute :hobbies, ArrayOf[String], default: []
+  attribute :something, OneOf[String, Numeric]
+end
+
+person = Person.build(hobbies: ["foo", "bar"])
+
+person.hobbies # => ["foo", "bar"]
+person.hobbies = [123, "foo"] # => raises TypeError
+person.hobbies = []
+person.hobbies # => []
+person.hobbies = ["test"]
+person.hobbies # => ["test"]
+
+person.something = "foo"
+person.something # => "foo"
+person.something = 123
+person.something # => 123
+person.something = nil # => raises TypeError
+```
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
@@ -83,3 +113,4 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/Fire-D
 
 [test-badge]: https://travis-ci.org/Fire-Dragon-DoL/fried-schema.svg?branch=master
 [test-link]: https://travis-ci.org/Fire-Dragon-DoL/fried-schema
+[fried-typings-link]: https://github.com/Fire-Dragon-DoL/fried-typings
