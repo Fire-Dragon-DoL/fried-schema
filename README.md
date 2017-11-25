@@ -25,7 +25,12 @@ Two modules are exposed:
 - `Fried::Schema::Struct`
 - `Fried::Schema::DataEntity`
 
-### Struct
+You shouldn't write an `initialize` method when you use any of the above
+modules. If you do, please make sure to call `super` or `super()`.
+
+### API
+
+#### Struct
 
 ```ruby
 class Person
@@ -49,7 +54,7 @@ person.age # => nil
 person.name = 123 # raises TypeError
 ```
 
-### DataEntity
+#### DataEntity
 
 Has all the same functionality as `Fried::Schema::Struct`, in addition to
 `#to_h` and `.build`
