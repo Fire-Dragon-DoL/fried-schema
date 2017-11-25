@@ -28,6 +28,9 @@ Two modules are exposed:
 You shouldn't write an `initialize` method when you use any of the above
 modules. If you do, please make sure to call `super` or `super()`.
 
+All type-checking is performed using `Fried::Typings::Is`, which uses just
+`#is_a?` under the hood.
+
 ### API
 
 #### Struct
