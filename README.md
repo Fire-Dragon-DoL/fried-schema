@@ -7,7 +7,7 @@ Struct definition with type safety
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'fried-schema'
+gem "fried-schema"
 ```
 
 And then execute:
