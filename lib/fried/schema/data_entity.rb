@@ -1,4 +1,5 @@
 require "fried/core"
+require "fried/schema/get_definition"
 require "fried/schema/struct"
 require "fried/schema/attributes_to_hash"
 require "fried/schema/hash_to_attributes"
@@ -10,8 +11,8 @@ module Fried::Schema
     module ClassMethods
       def build(attributes = {})
         new.tap do |instance|
-          schema = self.instance_variable_get(:@__fried_schema__)
-          ::Fried::Schema::HashToAttributes.(schema, attributes, instance)
+          schema = GetDefinition.(self)
+          HashToAttributes.(schema, attributes, instance)
         end
       end
     end
@@ -19,8 +20,8 @@ module Fried::Schema
     # @return [Hash{Symbol => Object}] a hash containing the values of all
     #   attribute name => value
     def to_h
-      schema = self.class.instance_variable_get(:@__fried_schema__)
-      ::Fried::Schema::AttributesToHash.(schema, self)
+      schema = GetDefinition.(self.class)
+      AttributesToHash.(schema, self)
     end
 
     def self.included(klass)

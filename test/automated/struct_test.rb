@@ -17,4 +17,14 @@ class StructTest < Minitest::Spec
 
     assert instance.foo == "test"
   end
+
+  it "allows comparison between structs" do
+    klass = Class.new { include ::Fried::Schema::Struct }
+    struct = klass.new
+    other = klass.new
+
+    comparison = struct <=> other
+
+    assert comparison == 0
+  end
 end

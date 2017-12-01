@@ -2,7 +2,10 @@ require "fried/core"
 require "fried/typings"
 require "fried/schema/attribute/definition"
 require "fried/schema/attribute/define_methods"
+require "fried/schema/compare"
+require "fried/schema/create_definition_if_missing"
 require "fried/schema/definition"
+require "fried/schema/get_definition"
 require "fried/schema/set_defaults"
 
 module Fried::Schema
@@ -12,8 +15,8 @@ module Fried::Schema
   module Struct
     module Initializer
       def initialize
-        schema = self.class.instance_variable_get(:@__fried_schema__)
-        ::Fried::Schema::SetDefaults.(schema, self)
+        schema = GetDefinition.(self.class)
+        SetDefaults.(schema, self)
       end
     end
 
@@ -30,20 +33,29 @@ module Fried::Schema
       #   object initialization
       # @return [Symbol] reader method name
       def attribute(name, type, default: Noop)
-        @__fried_schema__ ||= ::Fried::Schema::Definition.new
-        definer = ::Fried::Schema::Attribute::Definition
+        schema = CreateDefinitionIfMissing.(self)
+        definer = Attribute::Definition
         attribute_definition = definer.new(name, type, default)
-        @__fried_schema__.add_attribute(attribute_definition)
-        ::Fried::Schema::Attribute::DefineMethods.(attribute_definition, self)
+        schema.add_attribute(attribute_definition)
+        Attribute::DefineMethods.(attribute_definition, self)
       end
     end
 
     def self.included(klass)
+      CreateDefinitionIfMissing.(klass)
+
       klass.instance_eval do
         include Initializer
         extend ClassMethods
         include ::Fried::Typings
+        include Comparable
       end
+    end
+
+    def <=>(other)
+      schema = GetDefinition.(self.class)
+
+      Compare.(schema, self, other)
     end
   end
 end
