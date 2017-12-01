@@ -1,4 +1,5 @@
 require "fried/core"
+require "fried/typings"
 require "fried/schema/attribute/definition"
 require "fried/schema/attribute/define_methods"
 require "fried/schema/definition"
@@ -41,6 +42,7 @@ module Fried::Schema
       klass.instance_eval do
         include Initializer
         extend ClassMethods
+        include ::Fried::Typings
       end
     end
   end
