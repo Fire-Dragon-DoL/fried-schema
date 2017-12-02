@@ -57,6 +57,9 @@ person.age # => nil
 person.name = 123 # raises TypeError
 ```
 
+`Struct`s are `Comparable`. Compare them with `<=>` which will just run
+`<=>` on each attribute and stop if any is different from 0
+
 #### DataEntity
 
 Has all the same functionality as `Fried::Schema::Struct`, in addition to
@@ -78,6 +81,9 @@ person.age # => 123
 
 person.to_h # => { name: "John", born_at: 2017-11-24 00:55:50 -0800, age: 123 }
 ```
+
+`to_h` works with nested DataEntities. So if a field is of a `DataEntity`
+type, `to_h` will be called on it.
 
 ### Fried::Typings integration
 
