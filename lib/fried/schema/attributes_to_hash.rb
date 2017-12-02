@@ -1,9 +1,15 @@
 require "fried/core"
+require "fried/schema/data_entity"
 require "fried/schema/get_attribute"
+require "fried/schema/get_definition"
+require "fried/typings"
 
 module Fried::Schema
-  # Converts all attributes into a {Hash} of name => value
+  # Converts all attributes into a {Hash} of name => value. It calls {#to_h} on
+  # each value that is a {DataEntity}
   class AttributesToHash
+    include ::Fried::Typings
+
     attr_accessor :get_attribute
 
     def initialize
@@ -28,9 +34,18 @@ module Fried::Schema
     def call(schema, obj)
       schema.each_attribute.inject({}) do |hash, attribute|
         value = get_attribute.(obj, attribute)
-        hash[attribute.name] = value
+        hash[attribute.name] = value_to_h(value)
         hash
       end
+    end
+
+    private
+
+    def value_to_h(value)
+      return value unless Is[DataEntity].valid?(value)
+
+      schema = GetDefinition.(value.class)
+      call(schema, value)
     end
   end
 end
