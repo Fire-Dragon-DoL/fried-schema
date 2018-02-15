@@ -10,13 +10,5 @@ require "fried/schema"
 # require "pry"
 # Pry.start
 
-class Foo
-  include Fried::Schema::DataEntity
-
-  attribute :name, String, default: ""
-  attribute :age, Numeric, default: 0
-  attribute :born_at, Time, default: -> { Time.now }
-end
-
 require "pry-byebug"
 Pry.start(__FILE__)
